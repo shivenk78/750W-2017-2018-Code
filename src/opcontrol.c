@@ -96,10 +96,20 @@ void operatorControl() {
 		baseDown = joystickGetDigital(1,8,JOY_LEFT);
 
 		//Single Stick Drive
+		if(abs(leftDrive)>20){
 		 motorSet(2,leftDrive);
 		 motorSet(3,leftDrive);
+	 }else{
+		 motorStop(2);
+		 motorStop(3);
+	 }
+	 if(abs(rightDrive)>20){
 		 motorSet(4,rightDrive);
 		 motorSet(5,rightDrive);
+	 }else{
+		 motorStop(4);
+		 motorStop(5);
+	 }
 
 			//Claw control
 		if(clawOpen){
