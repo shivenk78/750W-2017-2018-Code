@@ -55,6 +55,8 @@ void operatorControl() {
 		int Ch3;
 		int Ch4;
 
+		int LIFT_UPPER_LIMIT = 2040;
+		int LIFT_LOWER_LIMIT = 560;
 		//Port Definitions
 		//2-frontleft
 		//3-backleft
@@ -109,10 +111,10 @@ void operatorControl() {
 		else motorStop(10);
 
 			//Lift control
-		if (liftUp){
+		if (liftUp&&leftLift<LIFT_UPPER_LIMIT){
 			motorSet(8, 127);
 		}
-		else if (liftDown){
+		else if (liftDown&&leftLift>LIFT_LOWER_LIMIT){
 			motorSet(8, -127);
 		}
 		else{
@@ -149,7 +151,7 @@ void operatorControl() {
 		lcdPrint(uart1,2,"LC %d RC %d",leftChain,rightChain);
 		printf("LL: %d RL: %d \n",leftLift,rightLift);
 		printf("LC: %d RC: %d \n",leftChain,rightChain);
-
+		//TODO: Start System!
 		delay(20);
 	}
 }
