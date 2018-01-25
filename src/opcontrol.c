@@ -149,7 +149,7 @@ void operatorControl() {
 		lcdPrint(uart1,2,"LC %d RC %d",leftChain,rightChain);
 		printf("LL: %d RL: %d \n",leftLift,rightLift);
 		printf("LC: %d RC: %d \n",leftChain,rightChain);
-		//TODO: Start System
+
 		delay(20);
 	}
 }
