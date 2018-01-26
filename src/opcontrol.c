@@ -38,6 +38,8 @@ void operatorControl() {
 	while (1) {
 		int leftDrive;
 		int rightDrive;
+		int leftDrive2;
+		int rightDrive2;
 		bool liftUp;
 		bool liftDown;
 		bool chainUp;
@@ -46,6 +48,8 @@ void operatorControl() {
 		bool clawClose;
 		bool baseUp;
 		bool baseDown;
+		bool baseUp2;
+		bool baseDown2;
 
 		int leftLift;
 		int leftChain;
@@ -54,6 +58,8 @@ void operatorControl() {
 
 		int Ch3;
 		int Ch4;
+		int Ch3joy2;
+		int Ch4joy2;
 
 		int LIFT_UPPER_LIMIT = 2040;
 		int LIFT_LOWER_LIMIT = 560;
@@ -79,9 +85,13 @@ void operatorControl() {
 
 		Ch3 = (abs(joystickGetAnalog(1, 3)) < 20) ? 0 : -joystickGetAnalog(1, 3);
 		Ch4 = (abs(joystickGetAnalog(1, 4)) < 20) ? 0 : joystickGetAnalog(1, 4);
+		Ch3joy2 = (abs(joystickGetAnalog(2, 3)) < 20) ? 0 : -joystickGetAnalog(2, 3);
+		Ch4joy2 = (abs(joystickGetAnalog(2, 4)) < 20) ? 0 : joystickGetAnalog(2, 4);
 
 		rightDrive = Ch4 - (2*Ch3);
 		leftDrive = Ch4 + (2*Ch3);
+		rightDrive2 = Ch4joy2 - (2*Ch3joy2);
+		leftDrive2 = Ch4joy2 + (2*Ch3joy2);
 
 		liftUp = joystickGetDigital(1, 5, JOY_UP);
 		liftDown = joystickGetDigital(1, 5, JOY_DOWN);
@@ -94,6 +104,8 @@ void operatorControl() {
 
 		baseUp = joystickGetDigital(1,8,JOY_RIGHT);
 		baseDown = joystickGetDigital(1,8,JOY_LEFT);
+		baseUp2 = joystickGetDigital(2,8,JOY_RIGHT);
+		baseDown2 = joystickGetDigital(2,8,JOY_LEFT);
 
 		//Single Stick Drive
 		if(abs(leftDrive)>20){
@@ -110,6 +122,20 @@ void operatorControl() {
 		 motorStop(4);
 		 motorStop(5);
 	 }
+	 if(abs(leftDrive2)>20){
+		motorSet(2,leftDrive2);
+		motorSet(3,leftDrive2);
+	}else{
+		motorStop(2);
+		motorStop(3);
+	}
+	if(abs(rightDrive2)>20){
+		motorSet(4,rightDrive2);
+		motorSet(5,rightDrive2);
+	}else{
+		motorStop(4);
+		motorStop(5);
+	}
 
 			//Claw control
 		if(clawOpen){
@@ -143,10 +169,10 @@ void operatorControl() {
 		}
 
 			//Mobile goal lift
-		if (baseDown){
+		if (baseDown||baseDown2){
 			motorSet(6, 127);
 			motorSet(7, 127);
-		}else if (baseUp){
+		}else if (baseUp||baseUp2){
 			motorSet(6, -127);
 			motorSet(7, -127);
 		}
