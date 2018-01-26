@@ -111,31 +111,24 @@ void operatorControl() {
 		if(abs(leftDrive)>20){
 		 motorSet(2,leftDrive);
 		 motorSet(3,leftDrive);
-	 }else{
-		 motorStop(2);
-		 motorStop(3);
-	 }
-	 if(abs(rightDrive)>20){
-		 motorSet(4,rightDrive);
-		 motorSet(5,rightDrive);
-	 }else{
-		 motorStop(4);
-		 motorStop(5);
-	 }
-	 if(abs(leftDrive2)>20){
+	 }else if(abs(leftDrive2)>20){
 		motorSet(2,leftDrive2);
 		motorSet(3,leftDrive2);
 	}else{
 		motorStop(2);
 		motorStop(3);
 	}
-	if(abs(rightDrive2)>20){
-		motorSet(4,rightDrive2);
-		motorSet(5,rightDrive2);
-	}else{
-		motorStop(4);
-		motorStop(5);
-	}
+	 if(abs(rightDrive)>20){
+		 motorSet(4,rightDrive);
+		 motorSet(5,rightDrive);
+	 }else if(abs(rightDrive2)>20){
+ 		motorSet(4,rightDrive2);
+ 		motorSet(5,rightDrive2);
+ 	}else{
+ 		motorStop(4);
+ 		motorStop(5);
+ 	}
+
 
 			//Claw control
 		if(clawOpen){
