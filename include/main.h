@@ -1,6 +1,6 @@
 /** @file main.h
  * @brief Header file for global functions
- * 
+ *
  * Any experienced C or C++ programmer knows the importance of header files. For those who
  * do not, a header file allows multiple files to reference functions in other files without
  * necessarily having to see the code (and therefore causing a multiple definition). To make
@@ -49,6 +49,12 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define QUAD_TOP_PORT 1
+#define QUAD_BOTTOM_PORT 2
+
+// Multiple encoders can be declared
+Encoder encoder;
 
 //#define AUTO_DEBUG
 
