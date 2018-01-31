@@ -150,7 +150,7 @@ void operatorControl() {
 		else motorStop(10);
 
 			//Lift control
-		if (liftUp&&leftLift<LIFT_UPPER_LIMIT){
+		if (liftUp&&leftLift){
 			motorSet(8, 127);
 		}
 		else if (liftDown&&leftLift>LIFT_LOWER_LIMIT){
