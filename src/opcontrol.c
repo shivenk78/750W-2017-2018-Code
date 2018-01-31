@@ -56,12 +56,15 @@ void operatorControl() {
 		int rightChain;
 		int rightLift;
 
+		Ultrasonic sonar = ultrasonicInit(7,8);
+		int ultraSonic = ultrasonicGet(sonar);
+
 		int Ch3;
 		int Ch4;
 		int Ch3joy2;
 		int Ch4joy2;
 
-		int LIFT_UPPER_LIMIT = 2040;
+		//int LIFT_UPPER_LIMIT = 2040;
 		int LIFT_LOWER_LIMIT = 560;
 		//Port Definitions
 		//2-frontleft
@@ -104,8 +107,8 @@ void operatorControl() {
 
 		baseUp = joystickGetDigital(1,8,JOY_RIGHT);
 		baseDown = joystickGetDigital(1,8,JOY_LEFT);
-		baseUp2 = joystickGetDigital(2,8,JOY_RIGHT);
-		baseDown2 = joystickGetDigital(2,8,JOY_LEFT);
+		baseUp2 = joystickGetDigital(2,6,JOY_UP);
+		baseDown2 = joystickGetDigital(2,6,JOY_DOWN);
 
 		//Single Stick Drive
 		if(abs(leftDrive)>20){
@@ -174,13 +177,26 @@ void operatorControl() {
 			motorStop(7);
 		}
 
+		//First Cone Macro
+		/*if (joystickGetDigital(1, 7, JOY_DOWN)){
+			while(rightChain>870){
+				motorSet(9, -127);
+				rightChain = analogReadCalibrated(CHAIN_RIGHT);
+			}
+			motorStop(9);
+			motorSet(10,127);
+			delay(500);
+		}*/
+
 		//LCD
 		lcdClear(uart1);
-		lcdPrint(uart1,1,"LL %d RL %d",leftLift,rightLift);
+		lcdPrint(uart1,1,"LL %d US %d",leftLift,ultraSonic);
 		lcdPrint(uart1,2,"LC %d RC %d",leftChain,rightChain);
 		printf("LL: %d RL: %d \n",leftLift,rightLift);
 		printf("LC: %d RC: %d \n",leftChain,rightChain);
 		//TODO: Start System!
 		delay(20);
 	}
+
+
 }
