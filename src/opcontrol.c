@@ -81,7 +81,7 @@ void operatorControl() {
 		//3 - ChainbarLeft
 		//4 - LiftLeft
 
-		sonar = ultrasonicInit(7,8);
+		//sonar = ultrasonicInit(7,8);
 		distance = ultrasonicGet(sonar);
 
 
