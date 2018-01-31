@@ -45,13 +45,13 @@
 
 #include <API.h>
 
+extern Ultrasonic sonar;
+
 // Allow usage of this file in C++ programs
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define QUAD_TOP_PORT 1
-#define QUAD_BOTTOM_PORT 2
 
 // Multiple encoders can be declared
 Encoder encoder;

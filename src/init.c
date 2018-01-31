@@ -23,7 +23,7 @@
 void initializeIO() {
   lcdInit(uart1);
   lcdSetBacklight(uart1, true);
-  Ultrasonic sonar = ultrasonicInit(7, 8);
+  sonar = ultrasonicInit(7, 8);
 }
 
 /*

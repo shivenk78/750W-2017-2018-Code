@@ -28,7 +28,7 @@
 */
 int distance;
 bool side = true; //TRUE = right FALSE = left
-Ultrasonic sonar =  ultrasonicInit(7, 8);
+Ultrasonic sonar;
 void autonomous() {
   distance = ultrasonicGet(sonar);
   if(side){

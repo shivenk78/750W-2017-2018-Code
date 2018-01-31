@@ -34,6 +34,7 @@
 #define CHAIN_LEFT 3
 #define LIFT_LEFT 4
 
+
 void operatorControl() {
 	while (1) {
 		int rightDrive;
@@ -56,8 +57,7 @@ void operatorControl() {
 		int rightChain;
 		int rightLift;
 
-		Ultrasonic sonar = ultrasonicInit(7,8);
-		int ultraSonic = ultrasonicGet(sonar);
+		int distance;
 
 		int Ch3;
 		int Ch4;
@@ -80,6 +80,10 @@ void operatorControl() {
 		//2 - ChainbarRight
 		//3 - ChainbarLeft
 		//4 - LiftLeft
+
+		sonar = ultrasonicInit(7,8);
+		distance = ultrasonicGet(sonar);
+
 
 		leftLift = analogReadCalibrated(LIFT_LEFT);
 		leftChain = analogReadCalibrated(CHAIN_LEFT);
@@ -114,6 +118,9 @@ void operatorControl() {
 		if(abs(leftDrive)>20){
 		 motorSet(2,leftDrive);
 		 motorSet(3,leftDrive);
+	 }else if(abs(leftDrive2)>20){
+		motorSet(2,leftDrive2);
+		motorSet(3,leftDrive2);
 	 }else{
 		 motorStop(2);
 		 motorStop(3);
@@ -121,24 +128,13 @@ void operatorControl() {
 	 if(abs(rightDrive)>20){
 		 motorSet(4,rightDrive);
 		 motorSet(5,rightDrive);
-	 }else{
-		 motorStop(4);
-		 motorStop(5);
-	 }
-	 if(abs(leftDrive2)>20){
-		motorSet(2,leftDrive2);
-		motorSet(3,leftDrive2);
-	}else{
-		motorStop(2);
-		motorStop(3);
-	}
-	if(abs(rightDrive2)>20){
-		motorSet(4,rightDrive2);
-		motorSet(5,rightDrive2);
-	}else{
-		motorStop(4);
-		motorStop(5);
-	}
+	 }else if(abs(rightDrive2)>20){
+ 		motorSet(4,rightDrive2);
+ 		motorSet(5,rightDrive2);
+ 	}else{
+ 		motorStop(4);
+ 		motorStop(5);
+ 	}
 
 			//Claw control
 		if(clawOpen){
@@ -197,11 +193,10 @@ void operatorControl() {
 
 		//LCD
 		lcdClear(uart1);
-		lcdPrint(uart1,1,"LL %d US %d",leftLift,ultraSonic);
+		lcdPrint(uart1,1,"LL %d US %d",leftLift,distance);
 		lcdPrint(uart1,2,"LC %d RC %d",leftChain,rightChain);
 		printf("LL: %d RL: %d \n",leftLift,rightLift);
 		printf("LC: %d RC: %d \n",leftChain,rightChain);
-		//TODO: Start System!
 		delay(20);
 	}
 
