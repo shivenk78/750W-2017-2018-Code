@@ -25,53 +25,18 @@
  *
  * The autonomous task may exit, unlike operatorControl() which should never exit. If it does
  * so, the robot will await a switch to another mode or disable/enable cycle.
- */
- //int rightChain = analogReadCalibrated(2);
-/*
-void forward(int time){
-  motorSet(2,127);
-  motorSet(3,127);
-  motorSet(4,-127);
-  motorSet(5,-127);
-  delay(time);
-  motorStop(2);
-  motorStop(3);
-  motorStop(4);
-  motorStop(5);
-} 
-void raiseChain(){
-  motorSet(9,-127);
-  motorStop(9);
-}
-void lowerChain(){
-  while(rightChain>){
-    motorSet(9,127);
-  }
-  motorStop(9);
-}
-void openClaw(){
-
-}
-void raiseGoal(){
-
-}*/
-
+*/
+int distance;
+bool side = true; //TRUE = right FALSE = left
+Ultrasonic sonar =  ultrasonicInit(7, 8);
 void autonomous() {
-  /*motorSet(8,127);
-  delay(500);
-  motorStop(8);
-  motorSet(6, 127);
-  motorSet(7, 127);
-  delay(700);
-  motorStop(6);
-  motorStop(7);
-  forward(4000);
-  motorSet(9,-127);
-  delay(600);
-  motorSet(9,127);
-  delay(2000);
-  motorStop(9);
-  motorSet(10,127);
-  delay(1000);
-  motorStop(10);*/
+  distance = ultrasonicGet(sonar);
+  if(side){
+    if(distance>10){
+      motorSet(2,127);
+      motorSet(3,127);
+      motorSet(4,-127);
+      motorSet(5,-127);
+    }
+  }
 }
