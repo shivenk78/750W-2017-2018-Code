@@ -26,17 +26,60 @@
  * The autonomous task may exit, unlike operatorControl() which should never exit. If it does
  * so, the robot will await a switch to another mode or disable/enable cycle.
 */
+//Port Definitions
+//6,7 mobile goal lift
+//8-main lift
+//9 chain bar lift
+//10 claw
+//1 - LiftRight
+//2 - ChainbarRight
+//3 - ChainbarLeft
+//4 - LiftLeft
+//2, 3 left
+//4, 5 right
 int distance;
 bool side = true; //TRUE = right FALSE = left
 Ultrasonic sonar;
 void autonomous() {
   distance = ultrasonicGet(sonar);
+  motorSet(6,-127);
+  motorSet(7,-127);
+  delay(600); //Lowers Mobile Goal Lift
+  motorStop(6);
+  motorStop(7);
+
+    motorSet(2,127);
+    motorSet(3,127);
+    motorSet(4,-127);
+    motorSet(5,-127);
+   //Goes forward until mobile goal is reached
+  motorSet(6,127);
+  motorSet(7,127);
+  delay(600); //Raises Mobile Goal
+  motorStop(6);
+  motorStop(7);
   if(side){
-    if(distance>10){
-      motorSet(2,127);
-      motorSet(3,127);
-      motorSet(4,-127);
-      motorSet(5,-127);
-    }
+    motorSet(2,-127);
+    motorSet(3,-127);
+    motorSet(4,-127);
+    motorSet(5,-127);
+    delay(1000); //Turns Left for RIGHT AUTON
+    motorStop(2);
+    motorStop(3);
+    motorStop(4);
+    motorStop(5);
   }
+  if(!side){
+    motorSet(2,127);
+    motorSet(3,127);
+    motorSet(4,127);
+    motorSet(5,127);
+    delay(1000); //Turns right for LEFT AUTON
+    motorStop(2);
+    motorStop(3);
+    motorStop(4);
+    motorStop(5);
+  }
+
+
 }

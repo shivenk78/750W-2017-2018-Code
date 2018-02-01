@@ -47,6 +47,8 @@ void operatorControl() {
 		bool chainDown;
 		bool clawOpen;
 		bool clawClose;
+		bool nautUp;
+		bool nautDown;
 		bool baseUp;
 		bool baseDown;
 		bool baseUp2;
@@ -58,6 +60,7 @@ void operatorControl() {
 		int rightLift;
 
 		int distance;
+		int enc;
 
 		int Ch3;
 		int Ch4;
@@ -67,6 +70,7 @@ void operatorControl() {
 		//int LIFT_UPPER_LIMIT = 2040;
 		int LIFT_LOWER_LIMIT = 560;
 		//Port Definitions
+		//1-nautilus
 		//2-frontleft
 		//3-backleft
 		//4-frontright
@@ -83,7 +87,7 @@ void operatorControl() {
 
 		//sonar = ultrasonicInit(7,8);
 		distance = ultrasonicGet(sonar);
-
+		enc = encoderGet(encoder);
 
 		leftLift = analogReadCalibrated(LIFT_LEFT);
 		leftChain = analogReadCalibrated(CHAIN_LEFT);
@@ -113,6 +117,9 @@ void operatorControl() {
 		baseDown = joystickGetDigital(1,8,JOY_LEFT);
 		baseUp2 = joystickGetDigital(2,6,JOY_UP);
 		baseDown2 = joystickGetDigital(2,6,JOY_DOWN);
+
+		nautUp = joystickGetDigital(2,7,JOY_UP);
+		nautDown = joystickGetDigital(2,7,JOY_DOWN);
 
 		//Single Stick Drive
 		if(abs(leftDrive)>20){
@@ -144,6 +151,14 @@ void operatorControl() {
 			motorSet(10, -127);
 		}
 		else motorStop(10);
+
+		if(nautUp){
+			motorSet(1, 127);
+		}
+		else if (nautDown){
+			motorSet(1, -127);
+		}
+		else motorStop(1);
 
 			//Lift control
 		if (liftUp&&leftLift){
@@ -194,7 +209,7 @@ void operatorControl() {
 		//LCD
 		lcdClear(uart1);
 		lcdPrint(uart1,1,"LL %d US %d",leftLift,distance);
-		lcdPrint(uart1,2,"LC %d RC %d",leftChain,rightChain);
+		lcdPrint(uart1,2,"EN %d RC %d",enc,rightChain);
 		printf("LL: %d RL: %d \n",leftLift,rightLift);
 		printf("LC: %d RC: %d \n",leftChain,rightChain);
 		delay(20);

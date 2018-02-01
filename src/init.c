@@ -24,6 +24,7 @@ void initializeIO() {
   lcdInit(uart1);
   lcdSetBacklight(uart1, true);
   sonar = ultrasonicInit(7, 8);
+  encoder = encoderInit(1, 2, false);
 }
 
 /*
