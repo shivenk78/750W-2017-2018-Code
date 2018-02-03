@@ -34,7 +34,6 @@
 #define CHAIN_LEFT 3
 #define LIFT_LEFT 4
 
-
 void operatorControl() {
 	while (1) {
 		int rightDrive;
@@ -43,6 +42,8 @@ void operatorControl() {
 		int rightDrive2;
 		bool liftUp;
 		bool liftDown;
+		bool liftUpSecond;
+		bool liftDownSecond;
 		bool chainUp;
 		bool chainDown;
 		bool clawOpen;
@@ -58,7 +59,9 @@ void operatorControl() {
 		int rightLift;
 
 		int distance;
+		int mogoDist;
 		int enc;
+		int dir;
 
 		int Ch3;
 		int Ch4;
@@ -68,7 +71,6 @@ void operatorControl() {
 		//int LIFT_UPPER_LIMIT = 2040;
 		int LIFT_LOWER_LIMIT = 560;
 		//Port Definitions
-		//1-nautilus
 		//2-frontleft
 		//3-backleft
 		//4-frontright
@@ -76,7 +78,7 @@ void operatorControl() {
 		//6,7 mobile goal lift
 		//8-main lift
 		//9 chain bar lift
-		//10 claw
+		//1 claw
 
 		//1 - LiftRight
 		//2 - ChainbarRight
@@ -85,12 +87,15 @@ void operatorControl() {
 
 		//sonar = ultrasonicInit(7,8);
 		distance = ultrasonicGet(sonar);
+		mogoDist = ultrasonicGet(mogoSonar);
 		enc = encoderGet(encoder);
+		dir = gyroGet(gyro);
 
 		leftLift = analogReadCalibrated(LIFT_LEFT);
 		leftChain = analogReadCalibrated(CHAIN_LEFT);
 		rightChain = analogReadCalibrated(CHAIN_RIGHT);
 		rightLift = analogReadCalibrated(LIFT_RIGHT);
+
 
 		Ch3 = (abs(joystickGetAnalog(1, 3)) < 20) ? 0 : -joystickGetAnalog(1, 3);
 		Ch4 = (abs(joystickGetAnalog(1, 4)) < 20) ? 0 : joystickGetAnalog(1, 4);
@@ -104,6 +109,8 @@ void operatorControl() {
 
 		liftUp = joystickGetDigital(1, 5, JOY_UP);
 		liftDown = joystickGetDigital(1, 5, JOY_DOWN);
+		liftUpSecond = joystickGetDigital(2, 5, JOY_UP);
+		liftDownSecond = joystickGetDigital(2, 5, JOY_DOWN);
 
 		chainUp = joystickGetDigital(1, 8, JOY_UP);
 		chainDown = joystickGetDigital(1, 8, JOY_DOWN);
@@ -141,7 +148,7 @@ void operatorControl() {
 	//Reverse from loading post
 	if(joystickGetDigital(2,7,JOY_UP)){
 		int temp = distance;
-		while(distance<(temp+26)){
+		while(distance<(temp+22)){
 			distance = ultrasonicGet(sonar);
 			motorSet(2,30);
 	    motorSet(3,30);
@@ -156,18 +163,18 @@ void operatorControl() {
 
 			//Claw control
 		if(clawOpen){
-			motorSet(10, 127);
+			motorSet(1, 127);
 		}
 		else if (clawClose){
-			motorSet(10, -127);
+			motorSet(1, -127);
 		}
-		else motorStop(10);
+		else motorStop(1);
 
 			//Lift control
-		if (liftUp&&leftLift){
+		if (liftUp||liftUpSecond){
 			motorSet(8, 127);
 		}
-		else if (liftDown&&leftLift>LIFT_LOWER_LIMIT){
+		else if ((liftDown&&leftLift>LIFT_LOWER_LIMIT)||(liftDownSecond&&leftLift>LIFT_LOWER_LIMIT)){
 			motorSet(8, -127);
 		}
 		else{
@@ -205,16 +212,14 @@ void operatorControl() {
 				rightChain = analogReadCalibrated(CHAIN_RIGHT);
 			}
 			motorStop(9);
-			motorSet(10,127);
+			motorSet(1,127);
 			delay(500);
 		}*/
 
 		//LCD
 		lcdClear(uart1);
-		lcdPrint(uart1,1,"LL %d US %d",leftLift,distance);
-		lcdPrint(uart1,2,"EN %d RC %d",enc,rightChain);
-		printf("LL: %d RL: %d \n",leftLift,rightLift);
-		printf("LC: %d RC: %d \n",leftChain,rightChain);
+		lcdPrint(uart1,1,"GY %d US %d",dir,distance);
+		lcdPrint(uart1,2,"AS %d MG %d",rightLift,mogoDist);
 		delay(20);
 	}
 

@@ -38,47 +38,82 @@
 //2, 3 left
 //4, 5 right
 int distance;
-bool side = false; //TRUE = left FALSE = right
+int dir;
+int selector;
+bool side; //TRUE = left FALSE = right
 void autonomous() {
-  distance = ultrasonicGet(sonar);
+
+  distance = ultrasonicGet(mogoSonar);
+  dir = gyroGet(gyro);
+  selector = analogReadCalibrated(1);
+
+  if(selector>2500){
+    side=true;
+  }else if(selector<1000){
+    side=false;
+  }
+  if(!(selector>1000||selector<2500)){
   motorSet(6,127);
   motorSet(7,127);
   delay(800); //Lowers Mobile Goal Lift
   motorStop(6);
   motorStop(7);
 
+  lcdClear(uart1);
+  lcdPrint(uart1,1,"%d",distance);
+
+  /*while(distance>=22){
+    distance = ultrasonicGet(mogoSonar);
     motorSet(2,-127);
     motorSet(3,-127);
     motorSet(4,127);
     motorSet(5,127);
-    delay(1500);
+    distance = ultrasonicGet(mogoSonar);
+  }
     motorStop(2);
     motorStop(3);
     motorStop(4);
     motorStop(5);
+    */
    //Goes forward until mobile goal is reached
   motorSet(6,-127);
   motorSet(7,-127);
   delay(800); //Raises Mobile Goal
   motorStop(6);
   motorStop(7);
+
+  motorSet(2,-127);
+  motorSet(3,-127);
+  motorSet(4,127);
+  motorSet(5,127);
+  delay(2500);
+  motorStop(2);
+  motorStop(3);
+  motorStop(4);
+  motorStop(5);
+
+  gyroReset(gyro);
   if(side){
+    while(abs(dir)<170){
+      dir = gyroGet(gyro); //Left Auton
     motorSet(2,-127);
     motorSet(3,-127);
     motorSet(4,-127);
     motorSet(5,-127);
-    delay(860); //Turns Left for LEFT AUTON
+  }
     motorStop(2);
     motorStop(3);
     motorStop(4);
     motorStop(5);
   }
   if(!side){
+    while(abs(dir)<170){
+      dir = gyroGet(gyro); //Right Auton
     motorSet(2,127);
     motorSet(3,127);
     motorSet(4,127);
     motorSet(5,127);
-    delay(860); //Turns right for RIGHT AUTON
+    }
     motorStop(2);
     motorStop(3);
     motorStop(4);
@@ -109,5 +144,5 @@ void autonomous() {
   motorStop(3);
   motorStop(4);
   motorStop(5);
-
+}
 }

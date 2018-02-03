@@ -50,7 +50,9 @@
 extern "C" {
 #endif
 Ultrasonic sonar;
+Ultrasonic mogoSonar;
 Encoder encoder;
+Gyro gyro;
 
 
 //#define AUTO_DEBUG
