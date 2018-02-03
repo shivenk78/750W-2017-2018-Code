@@ -67,7 +67,7 @@ void autonomous() {
     motorSet(3,-127);
     motorSet(4,-127);
     motorSet(5,-127);
-    delay(1000); //Turns Left for LEFT AUTON
+    delay(1150); //Turns Left for LEFT AUTON
     motorStop(2);
     motorStop(3);
     motorStop(4);
@@ -78,7 +78,7 @@ void autonomous() {
     motorSet(3,127);
     motorSet(4,127);
     motorSet(5,127);
-    delay(1000); //Turns right for RIGHT AUTON
+    delay(1150); //Turns right for RIGHT AUTON
     motorStop(2);
     motorStop(3);
     motorStop(4);
