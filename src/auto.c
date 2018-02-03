@@ -38,24 +38,28 @@
 //2, 3 left
 //4, 5 right
 int distance;
-bool side = true; //TRUE = right FALSE = left
-Ultrasonic sonar;
+bool side = false; //TRUE = left FALSE = right
 void autonomous() {
   distance = ultrasonicGet(sonar);
-  motorSet(6,-127);
-  motorSet(7,-127);
-  delay(600); //Lowers Mobile Goal Lift
+  motorSet(6,127);
+  motorSet(7,127);
+  delay(800); //Lowers Mobile Goal Lift
   motorStop(6);
   motorStop(7);
 
-    motorSet(2,127);
-    motorSet(3,127);
-    motorSet(4,-127);
-    motorSet(5,-127);
+    motorSet(2,-127);
+    motorSet(3,-127);
+    motorSet(4,127);
+    motorSet(5,127);
+    delay(2000);
+    motorStop(2);
+    motorStop(3);
+    motorStop(4);
+    motorStop(5);
    //Goes forward until mobile goal is reached
-  motorSet(6,127);
-  motorSet(7,127);
-  delay(600); //Raises Mobile Goal
+  motorSet(6,-127);
+  motorSet(7,-127);
+  delay(800); //Raises Mobile Goal
   motorStop(6);
   motorStop(7);
   if(side){
@@ -63,7 +67,7 @@ void autonomous() {
     motorSet(3,-127);
     motorSet(4,-127);
     motorSet(5,-127);
-    delay(1000); //Turns Left for RIGHT AUTON
+    delay(1000); //Turns Left for LEFT AUTON
     motorStop(2);
     motorStop(3);
     motorStop(4);
@@ -74,12 +78,36 @@ void autonomous() {
     motorSet(3,127);
     motorSet(4,127);
     motorSet(5,127);
-    delay(1000); //Turns right for LEFT AUTON
+    delay(1000); //Turns right for RIGHT AUTON
     motorStop(2);
     motorStop(3);
     motorStop(4);
     motorStop(5);
   }
+  motorSet(2,-127);
+  motorSet(3,-127);
+  motorSet(4,127);
+  motorSet(5,127);
+  delay(3000);
+  motorStop(2);
+  motorStop(3);
+  motorStop(4);
+  motorStop(5);
 
+  motorSet(6,127);
+  motorSet(7,127);
+  delay(800); //Lowers Mobile Goal Lift
+  motorStop(6);
+  motorStop(7);
+
+  motorSet(2,127);
+  motorSet(3,127);
+  motorSet(4,-127);
+  motorSet(5,-127);
+  delay(500);
+  motorStop(2);
+  motorStop(3);
+  motorStop(4);
+  motorStop(5);
 
 }

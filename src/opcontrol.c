@@ -47,8 +47,6 @@ void operatorControl() {
 		bool chainDown;
 		bool clawOpen;
 		bool clawClose;
-		bool nautUp;
-		bool nautDown;
 		bool baseUp;
 		bool baseDown;
 		bool baseUp2;
@@ -118,9 +116,6 @@ void operatorControl() {
 		baseUp2 = joystickGetDigital(2,6,JOY_UP);
 		baseDown2 = joystickGetDigital(2,6,JOY_DOWN);
 
-		nautUp = joystickGetDigital(2,7,JOY_UP);
-		nautDown = joystickGetDigital(2,7,JOY_DOWN);
-
 		//Single Stick Drive
 		if(abs(leftDrive)>20){
 		 motorSet(2,leftDrive);
@@ -143,6 +138,22 @@ void operatorControl() {
  		motorStop(5);
  	}
 
+	//Reverse from loading post
+	if(joystickGetDigital(2,7,JOY_UP)){
+		int temp = distance;
+		while(distance<(temp+26)){
+			distance = ultrasonicGet(sonar);
+			motorSet(2,30);
+	    motorSet(3,30);
+	    motorSet(4,-30);
+	    motorSet(5,-30);
+		}
+		motorStop(2);
+		motorStop(3);
+		motorStop(4);
+		motorStop(5);
+	}
+
 			//Claw control
 		if(clawOpen){
 			motorSet(10, 127);
@@ -151,14 +162,6 @@ void operatorControl() {
 			motorSet(10, -127);
 		}
 		else motorStop(10);
-
-		if(nautUp){
-			motorSet(1, 127);
-		}
-		else if (nautDown){
-			motorSet(1, -127);
-		}
-		else motorStop(1);
 
 			//Lift control
 		if (liftUp&&leftLift){
@@ -214,6 +217,5 @@ void operatorControl() {
 		printf("LC: %d RC: %d \n",leftChain,rightChain);
 		delay(20);
 	}
-
 
 }

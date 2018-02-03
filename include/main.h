@@ -45,16 +45,13 @@
 
 #include <API.h>
 
-extern Ultrasonic sonar;
-
 // Allow usage of this file in C++ programs
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
-// Multiple encoders can be declared
+Ultrasonic sonar;
 Encoder encoder;
+
 
 //#define AUTO_DEBUG
 
