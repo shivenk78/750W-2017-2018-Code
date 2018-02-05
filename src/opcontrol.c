@@ -163,10 +163,10 @@ void operatorControl() {
 
 			//Claw control
 		if(clawOpen){
-			motorSet(1, 127);
+			motorSet(1, -127);
 		}
 		else if (clawClose){
-			motorSet(1, -127);
+			motorSet(1, 127);
 		}
 		else motorStop(1);
 
@@ -174,7 +174,7 @@ void operatorControl() {
 		if (liftUp||liftUpSecond){
 			motorSet(8, 127);
 		}
-		else if ((liftDown&&leftLift>LIFT_LOWER_LIMIT)||(liftDownSecond&&leftLift>LIFT_LOWER_LIMIT)){
+		else if ((liftDown)||(liftDownSecond)){
 			motorSet(8, -127);
 		}
 		else{
@@ -215,11 +215,18 @@ void operatorControl() {
 			motorSet(1,127);
 			delay(500);
 		}*/
-
+		char val = 'w';
+		if(rightLift>2500){
+			val='L';
+		}else if(rightLift<1000){
+			val='R';
+		}else{
+			val='O';
+		}
 		//LCD
 		lcdClear(uart1);
 		lcdPrint(uart1,1,"GY %d US %d",dir,distance);
-		lcdPrint(uart1,2,"AS %d MG %d",rightLift,mogoDist);
+		lcdPrint(uart1,2,"AS %c MG %d",val,mogoDist);
 		delay(20);
 	}
 
