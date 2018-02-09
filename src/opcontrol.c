@@ -34,6 +34,8 @@
 #define CHAIN_LEFT 3
 #define LIFT_LEFT 4
 
+bool backlight = true;
+
 void operatorControl() {
 	while (1) {
 		int rightDrive;
@@ -217,6 +219,11 @@ void operatorControl() {
 		lcdClear(uart1);
 		lcdPrint(uart1,1,"GY %d US %d",dir,distance);
 		lcdPrint(uart1,2,"AS %c MG %d",val,mogoDist);
+
+		if(lcdReadButtons(uart1)==LCD_BTN_CENTER){
+			backlight = !backlight;
+			lcdSetBacklight(uart1, backlight);
+		}
 		delay(20);
 	}
 

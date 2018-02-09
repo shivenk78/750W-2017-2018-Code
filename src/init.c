@@ -23,6 +23,8 @@
 void initializeIO() {
   lcdInit(uart1);
   lcdSetBacklight(uart1, true);
+  lcdPrint(uart1,1,"   << 750W >>   ");
+  lcdPrint(uart1, 2, "  << WOLVES >>  ");
 }
 
 /*
@@ -43,5 +45,4 @@ void initialize() {
   mogoSonar = ultrasonicInit(3,4);
   encoder = encoderInit(1, 2, false);
   gyro = gyroInit(5,0);
-
 }
