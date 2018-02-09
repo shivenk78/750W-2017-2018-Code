@@ -71,13 +71,13 @@ void operatorControl() {
 		//int LIFT_UPPER_LIMIT = 2040;
 		int LIFT_LOWER_LIMIT = 560;
 		//Port Definitions
-		//2-frontleft
+		//8-frontleft
 		//3-backleft
-		//4-frontright
+		//9-frontright
 		//5 backright
 		//6,7 mobile goal lift
-		//8-main lift
-		//9 chain bar lift
+		//2-main lift
+		//4 chain bar lift
 		//1 claw
 
 		//1 - LiftRight
@@ -125,39 +125,39 @@ void operatorControl() {
 
 		//Single Stick Drive
 		if(abs(leftDrive)>20){
-		 motorSet(2,leftDrive);
+		 motorSet(8,leftDrive);
 		 motorSet(3,leftDrive);
 	 }else if(abs(leftDrive2)>20){
-		motorSet(2,leftDrive2);
+		motorSet(8,leftDrive2);
 		motorSet(3,leftDrive2);
 	 }else{
-		 motorStop(2);
+		 motorStop(8);
 		 motorStop(3);
 	 }
 	 if(abs(rightDrive)>20){
-		 motorSet(4,rightDrive);
+		 motorSet(9,rightDrive);
 		 motorSet(5,rightDrive);
 	 }else if(abs(rightDrive2)>20){
- 		motorSet(4,rightDrive2);
+ 		motorSet(9,rightDrive2);
  		motorSet(5,rightDrive2);
  	}else{
- 		motorStop(4);
+ 		motorStop(9);
  		motorStop(5);
  	}
 
 	//Reverse from loading post
-	if(joystickGetDigital(2,7,JOY_UP)){
+	if(joystickGetDigital(1,7,JOY_UP)||joystickGetDigital(2,7,JOY_UP)){
 		int temp = distance;
 		while(distance<(temp+22)){
 			distance = ultrasonicGet(sonar);
-			motorSet(2,30);
+			motorSet(8,30);
 	    motorSet(3,30);
-	    motorSet(4,-30);
+	    motorSet(9,-30);
 	    motorSet(5,-30);
 		}
-		motorStop(2);
+		motorStop(8);
 		motorStop(3);
-		motorStop(4);
+		motorStop(9);
 		motorStop(5);
 	}
 
@@ -172,24 +172,24 @@ void operatorControl() {
 
 			//Lift control
 		if (liftUp||liftUpSecond){
-			motorSet(8, 127);
+			motorSet(2, 127);
 		}
 		else if ((liftDown)||(liftDownSecond)){
-			motorSet(8, -127);
+			motorSet(2, -127);
 		}
 		else{
-			motorStop(8);
+			motorStop(2);
 		}
 
 			//Chain lift control
 		if (chainUp){
-			motorSet(9, -127);
+			motorSet(4, -127);
 		}
 		else if (chainDown){
-			motorSet(9, 127);
+			motorSet(4, 127);
 		}
 		else{
-			motorStop(9);
+			motorStop(4);
 		}
 
 			//Mobile goal lift
@@ -205,23 +205,13 @@ void operatorControl() {
 			motorStop(7);
 		}
 
-		//First Cone Macro
-		/*if (joystickGetDigital(1, 7, JOY_DOWN)){
-			while(rightChain>870){
-				motorSet(9, -127);
-				rightChain = analogReadCalibrated(CHAIN_RIGHT);
-			}
-			motorStop(9);
-			motorSet(1,127);
-			delay(500);
-		}*/
 		char val = 'w';
 		if(rightLift>2500){
 			val='L';
 		}else if(rightLift<1000){
 			val='R';
 		}else{
-			val='O';
+			val='o';
 		}
 		//LCD
 		lcdClear(uart1);
