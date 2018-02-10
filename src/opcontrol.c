@@ -53,6 +53,8 @@ void operatorControl() {
 		bool baseUp2;
 		bool baseDown2;
 
+
+
 		int leftLift;
 		int leftChain;
 		int rightChain;
@@ -70,15 +72,15 @@ void operatorControl() {
 
 		//int LIFT_UPPER_LIMIT = 2040;
 		int LIFT_LOWER_LIMIT = 560;
-		//Port Definitions
-		//8-frontleft
-		//3-backleft
-		//9-frontright
-		//5 backright
-		//6,7 mobile goal lift
-		//2-main lift
-		//4 chain bar lift
-		//1 claw
+		int claw = 1;
+		int frontleft = 2;
+		int frontright = 3;
+		int mainlift = 5;
+		int chainlift = 4;
+		int mobileliftleft = 6;
+		int mobileliftright = 7;
+		int backright = 8;
+		int backleft = 10;
 
 		//1 - LiftRight
 		//2 - ChainbarRight
@@ -97,9 +99,9 @@ void operatorControl() {
 		rightLift = analogReadCalibrated(LIFT_RIGHT);
 
 
-		Ch3 = (abs(joystickGetAnalog(1, 3)) < 20) ? 0 : -joystickGetAnalog(1, 3);
+		Ch3 = (abs(joystickGetAnalog(1, 3)) < 20) ? 0 : joystickGetAnalog(1, 3);
 		Ch4 = (abs(joystickGetAnalog(1, 4)) < 20) ? 0 : joystickGetAnalog(1, 4);
-		Ch3joy2 = (abs(joystickGetAnalog(2, 3)) < 20) ? 0 : -joystickGetAnalog(2, 3);
+		Ch3joy2 = (abs(joystickGetAnalog(2, 3)) < 20) ? 0 : joystickGetAnalog(2, 3);
 		Ch4joy2 = (abs(joystickGetAnalog(2, 4)) < 20) ? 0 : joystickGetAnalog(2, 4);
 
 		rightDrive = Ch4 - (2*Ch3);
@@ -125,24 +127,24 @@ void operatorControl() {
 
 		//Single Stick Drive
 		if(abs(leftDrive)>20){
-		 motorSet(8,leftDrive);
-		 motorSet(3,leftDrive);
+		 motorSet(frontleft,leftDrive);
+		 motorSet(backleft,-leftDrive);
 	 }else if(abs(leftDrive2)>20){
-		motorSet(8,leftDrive2);
-		motorSet(3,leftDrive2);
+		motorSet(frontleft,leftDrive2);
+		motorSet(backleft,-leftDrive2);
 	 }else{
-		 motorStop(8);
-		 motorStop(3);
+		 motorStop(frontleft);
+		 motorStop(backleft);
 	 }
 	 if(abs(rightDrive)>20){
-		 motorSet(9,rightDrive);
-		 motorSet(5,rightDrive);
+		 motorSet(frontright,rightDrive);
+		 motorSet(backright,rightDrive);
 	 }else if(abs(rightDrive2)>20){
- 		motorSet(9,rightDrive2);
- 		motorSet(5,rightDrive2);
+ 		motorSet(frontright,rightDrive2);
+ 		motorSet(backright,rightDrive2);
  	}else{
- 		motorStop(9);
- 		motorStop(5);
+ 		motorStop(frontright);
+ 		motorStop(backright);
  	}
 
 	//Reverse from loading post
@@ -150,59 +152,59 @@ void operatorControl() {
 		int temp = distance;
 		while(distance<(temp+22)){
 			distance = ultrasonicGet(sonar);
-			motorSet(8,30);
-	    motorSet(3,30);
-	    motorSet(9,-30);
-	    motorSet(5,-30);
+			motorSet(backright,30);
+	    motorSet(frontright,30);
+	    motorSet(backleft,30);
+	    motorSet(frontleft,-30);
 		}
-		motorStop(8);
-		motorStop(3);
-		motorStop(9);
-		motorStop(5);
+		motorStop(backright);
+		motorStop(frontright);
+		motorStop(backleft);
+		motorStop(frontleft);
 	}
 
 			//Claw control
 		if(clawOpen){
-			motorSet(1, -127);
+			motorSet(claw, -127);
 		}
 		else if (clawClose){
-			motorSet(1, 127);
+			motorSet(claw, 127);
 		}
-		else motorStop(1);
+		else motorStop(claw);
 
 			//Lift control
 		if (liftUp||liftUpSecond){
-			motorSet(2, 127);
+			motorSet(mainlift, 127);
 		}
 		else if ((liftDown)||(liftDownSecond)){
-			motorSet(2, -127);
+			motorSet(mainlift, -127);
 		}
 		else{
-			motorStop(2);
+			motorStop(mainlift);
 		}
 
 			//Chain lift control
 		if (chainUp){
-			motorSet(4, -127);
+			motorSet(chainlift, -127);
 		}
 		else if (chainDown){
-			motorSet(4, 127);
+			motorSet(chainlift, 127);
 		}
 		else{
-			motorStop(4);
+			motorStop(chainlift);
 		}
 
 			//Mobile goal lift
 		if (baseDown||baseDown2){
-			motorSet(6, 127);
-			motorSet(7, 127);
+			motorSet(mobileliftleft, 127);
+			motorSet(mobileliftright, 127);
 		}else if (baseUp||baseUp2){
-			motorSet(6, -127);
-			motorSet(7, -127);
+			motorSet(mobileliftleft, -127);
+			motorSet(mobileliftright, -127);
 		}
 		else{
-			motorStop(6);
-			motorStop(7);
+			motorStop(mobileliftleft);
+			motorStop(mobileliftright);
 		}
 
 		char val = 'w';

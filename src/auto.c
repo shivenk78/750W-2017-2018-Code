@@ -18,55 +18,65 @@ int dir;
 int selector;
 bool side; //TRUE = left FALSE = right
 
+int claw = 1;
+int frontleft = 2;
+int frontright = 3;
+int mainlift = 5;
+int chainlift = 4;
+int mobileliftleft = 6;
+int mobileliftright = 7;
+int backright = 8;
+int backleft = 10;
+
 void mogoDown(){
-  motorSet(6,127);
-  motorSet(7,127);
-  delay(800); //Lowers Mobile Goal Lift
-  motorStop(6);
-  motorStop(7);
+  motorSet(mobileliftleft,127);
+  motorSet(mobileliftright,127);
+  delay(1000); //Lowers Mobile Goal Lift
+  motorStop(mobileliftleft);
+  motorStop(mobileliftright);
 }
 void mogoUp(){
-  motorSet(6,-127);
-  motorSet(7,-127);
+  motorSet(mobileliftleft,-127);
+  motorSet(mobileliftright,-127);
   delay(700); //Raises Mobile Goal
-  motorStop(6);
-  motorStop(7);
+  motorStop(mobileliftleft);
+  motorStop(mobileliftright);
 }
 void forward(int del){
-  motorSet(8,-127);
-  motorSet(3,-127);
-  motorSet(9,127);
-  motorSet(5,127);
+  motorSet(backright,-127);
+  motorSet(backleft,-127);
+  motorSet(frontright,-127);
+  motorSet(frontleft,127);
   delay(del);
-  motorStop(8);
-  motorStop(3);
-  motorStop(9);
-  motorStop(5);
+  motorStop(backright);
+  motorStop(backleft);
+  motorStop(frontright);
+  motorStop(frontleft);
 }
 void reverse(int del){
-  motorSet(8,127);
-  motorSet(3,127);
-  motorSet(9,-127);
-  motorSet(5,-127);
+  motorSet(backright,127);
+  motorSet(backleft,127);
+  motorSet(frontright,127);
+  motorSet(frontleft,-127);
   delay(del);
-  motorStop(8);
-  motorStop(3);
-  motorStop(9);
-  motorStop(5);
+  motorStop(backright);
+  motorStop(backleft);
+  motorStop(frontright);
+  motorStop(frontleft);
 }
 void preload(){
-  motorSet(4,127);
-  motorSet(1,127);
-  delay(800);
-  motorSet(4,-127);
-  motorSet(1,127);
-  delay(700);
-  motorStop(4);
+  motorSet(chainlift,80);
+  motorSet(claw,127);
+  delay(1000);
+  motorSet(chainlift,-80);
+  motorSet(claw,127);
+  delay(850);
+  motorStop(chainlift);
   delay(500);
-  motorSet(1,-127);
+  motorSet(claw,-127);
   delay(500);
-  motorStop(4);
-  motorStop(1);
+  motorStop(chainlift);
+  motorStop(claw);
 }
 void turnLeft(int angle){
   gyroReset(gyro);
@@ -74,15 +84,15 @@ void turnLeft(int angle){
     dir+=4;
     while(abs(dir)<angle){
       dir = gyroGet(gyro);
-    motorSet(8,-127);
-    motorSet(3,-127);
-    motorSet(9,-127);
-    motorSet(5,-127);
+      motorSet(backright,-127);
+      motorSet(backleft,127);
+      motorSet(frontright,-127);
+      motorSet(frontleft,-127);
     }
-    motorStop(8);
-    motorStop(3);
-    motorStop(9);
-    motorStop(5);
+    motorStop(backright);
+    motorStop(backleft);
+    motorStop(frontright);
+    motorStop(frontleft);
 }
 void turnRight(int angle){
   gyroReset(gyro);
@@ -90,20 +100,20 @@ void turnRight(int angle){
   dir+=4;
     while(abs(dir)<170){
       dir = gyroGet(gyro); //Right Auton
-    motorSet(8,127);
-    motorSet(3,127);
-    motorSet(9,127);
-    motorSet(5,127);
+      motorSet(backright,127);
+      motorSet(backleft,-127);
+      motorSet(frontright,127);
+      motorSet(frontleft,127);
     }
-    motorStop(8);
-    motorStop(3);
-    motorStop(9);
-    motorStop(5);
+    motorStop(backright);
+    motorStop(backleft);
+    motorStop(frontright);
+    motorStop(frontleft);
 }
 void liftUp(int del){
-  motorSet(2,127);
+  motorSet(mainlift,127);
   delay(del);
-  motorStop(2);
+  motorStop(mainlift);
 }
 void autonomous() {
 
@@ -120,10 +130,19 @@ void autonomous() {
      //Goes forward until mobile goal is reached
     mogoUp();
     preload();
-    reverse(1000);
+    reverse(1400);
 
     turnLeft(170);
-    forward(2500);
+
+    motorSet(backright,-50);
+    motorSet(backleft,-127);
+    motorSet(frontright,-50);
+    motorSet(frontleft,127);
+    delay(2000);
+    motorStop(backright);
+    motorStop(backleft);
+    motorStop(frontright);
+    motorStop(frontleft);
     mogoDown();
     reverse(1500);
   }
@@ -132,16 +151,35 @@ void autonomous() {
     liftUp(500);
 
     mogoDown();
+    forward(1650);
+     //Goes forward until mobile goal is reached
+    mogoUp();
+    preload();
+    reverse(1100);
+
+    turnRight(170);
+    motorSet(backright,-120);
+    motorSet(backleft,-50);
+    motorSet(frontright,-120);
+    motorSet(frontleft,50);
+    delay(1500);
+    motorStop(backright);
+    motorStop(backleft);
+    motorStop(frontright);
+    motorStop(frontleft);
+    mogoDown();
+    reverse(1500);
+  }
+  else{
+    liftUp(500);
+    mogoDown();
     forward(1750);
      //Goes forward until mobile goal is reached
     mogoUp();
     preload();
-    reverse(1500);
-
-    turnRight(170);
-    forward(1500);
     mogoDown();
-    reverse(1500);
+    reverse(1000);
+
   }
 
 }
