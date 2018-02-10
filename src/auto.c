@@ -122,7 +122,7 @@ void autonomous() {
   selector = analogReadCalibrated(1);
 
   gyroReset(gyro);
-  if(selector>2500){ //LEFT AUTON
+  if(selector>2500){ //LEFT AUTON ////////////////////////////////
     liftUp(500);
 
     mogoDown();
@@ -147,7 +147,7 @@ void autonomous() {
     reverse(1500);
   }
 
-  else if(selector<1000){ //RIGHT AUTON
+  else if(selector<1000){ //RIGHT AUTON ////////////////////////////////
     liftUp(500);
 
     mogoDown();
