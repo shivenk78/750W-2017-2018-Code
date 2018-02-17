@@ -254,7 +254,7 @@ void operatorControl() {
 		//LCD
 		lcdClear(uart1);
 		lcdPrint(uart1,1,"GY %d US %d",dir,distance);
-		lcdPrint(uart1,2,"AS %c MG %d",val,mogoDist);
+		lcdPrint(uart1,2,"AS %c EN %d",val,enc);
 
 		if(lcdReadButtons(uart1)==LCD_BTN_CENTER){
 			backlight = !backlight;

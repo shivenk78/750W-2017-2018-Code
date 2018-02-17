@@ -43,6 +43,6 @@ void initializeIO() {
 void initialize() {
   sonar = ultrasonicInit(7, 8);
   mogoSonar = ultrasonicInit(3,4);
-  encoder = encoderInit(1, 2, false);
+  encoder = encoderInit(1, 2, true);
   gyro = gyroInit(5,0);
 }

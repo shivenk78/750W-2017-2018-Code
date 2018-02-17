@@ -14,6 +14,7 @@
 //3 - ChainbarLeft
 //4 - LiftLeft
 int distance;
+int enc;
 int dir;
 int selector;
 bool side; //TRUE = left FALSE = right
@@ -48,6 +49,21 @@ void forward(int del){
   motorSet(frontright,-127);
   motorSet(frontleft,127);
   delay(del);
+  motorStop(backright);
+  motorStop(backleft);
+  motorStop(frontright);
+  motorStop(frontleft);
+}
+void enForward(int dist){
+  encoderReset(encoder);
+  enc = encoderGet(encoder);
+  while(enc<dist){
+    enc = encoderGet(encoder);
+    motorSet(backright,-127);
+    motorSet(backleft,-127);
+    motorSet(frontright,-127);
+    motorSet(frontleft,127);
+  }
   motorStop(backright);
   motorStop(backleft);
   motorStop(frontright);
@@ -121,6 +137,9 @@ void autonomous() {
   dir = gyroGet(gyro);
   selector = analogReadCalibrated(1);
 
+  lcdPrint(uart1,1,"Bat: %1.3f V",(double)powerLevelMain()/1000);
+  lcdSetText(uart1,2,"<<750 WOLVES>>");
+
   gyroReset(gyro);
   if(selector>2500){ //LEFT AUTON ////////////////////////////////
     liftUp(500);
@@ -190,18 +209,20 @@ void autonomous() {
     turnRight(154);
     forward(600);
     mogoDown();
+
     //second
     reverse(600);
     turnLeft(152);
     forward(2300);
     mogoUp();
-    forward(500);
+    forward(700);
     mogoDown();
 
     //third
     reverse(450);
     turnLeft(50);
-    forward(450);
+    //forward(450);
+    enForward(400);
     turnLeft(68);
     forward(1300);
     mogoUp();
@@ -209,13 +230,30 @@ void autonomous() {
     turnRight(153);
     forward(600);
     mogoDown();
+
+    //fourth
     reverse(800);
     turnLeft(155);
     forward(2300);
     mogoUp();
     forward(1000);
     mogoDown();
-    reverse(500);
+
+    //fifth
+    reverse(300);
+    turnRight(50);
+    forward(200);
+    turnRight(30);
+    forward(2000);
+    mogoUp();
+    reverse(1400);
+    turnLeft(140);
+    forward(1000);
+    turnRight(50);
+    forward(300);
+    mogoDown();
+    reverse(400);
+
 
   }
 
