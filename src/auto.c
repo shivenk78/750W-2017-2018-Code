@@ -31,7 +31,7 @@ int backleft = 10;
 void mogoDown(){
   motorSet(mobileliftleft,127);
   motorSet(mobileliftright,127);
-  delay(1000); //Lowers Mobile Goal Lift
+  delay(1100); //Lowers Mobile Goal Lift
   motorStop(mobileliftleft);
   motorStop(mobileliftright);
 }
@@ -98,7 +98,7 @@ void turnRight(int angle){
   gyroReset(gyro);
   dir = gyroGet(gyro);
   dir+=4;
-    while(abs(dir)<170){
+    while(abs(dir)<angle){
       dir = gyroGet(gyro); //Right Auton
       motorSet(backright,127);
       motorSet(backleft,-127);
@@ -170,7 +170,7 @@ void autonomous() {
     mogoDown();
     reverse(1500);
   }
-  else{
+  /*else{  //Off Auton ////////////////////////////////////////////////////
     liftUp(500);
     mogoDown();
     forward(1750);
@@ -179,6 +179,43 @@ void autonomous() {
     preload();
     mogoDown();
     reverse(1000);
+  }*/
+  else{
+    //first
+    liftUp(500);
+    mogoDown();
+    forward(1200);
+    mogoUp();
+    reverse(1400);
+    turnRight(154);
+    forward(600);
+    mogoDown();
+    //second
+    reverse(600);
+    turnLeft(152);
+    forward(2300);
+    mogoUp();
+    forward(500);
+    mogoDown();
+
+    //third
+    reverse(450);
+    turnLeft(50);
+    forward(450);
+    turnLeft(68);
+    forward(1300);
+    mogoUp();
+    reverse(1400);
+    turnRight(153);
+    forward(600);
+    mogoDown();
+    reverse(800);
+    turnLeft(155);
+    forward(2300);
+    mogoUp();
+    forward(1000);
+    mogoDown();
+    reverse(500);
 
   }
 

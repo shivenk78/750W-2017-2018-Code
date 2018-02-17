@@ -35,6 +35,9 @@
 #define LIFT_LEFT 4
 
 bool backlight = true;
+bool oldButton = false;
+bool newButton;
+bool tankMode = false;
 
 void operatorControl() {
 	while (1) {
@@ -71,6 +74,13 @@ void operatorControl() {
 		int Ch4;
 		int Ch3joy2;
 		int Ch4joy2;
+		int leftJoy;
+		int rightJoy;
+
+		bool leftForward;
+		bool laftBackward;
+		bool rightForward;
+		bool rightBackward;
 
 		//int LIFT_UPPER_LIMIT = 2040;
 		int LIFT_LOWER_LIMIT = 560;
@@ -105,6 +115,13 @@ void operatorControl() {
 		Ch4 = (abs(joystickGetAnalog(1, 4)) < 20) ? 0 : joystickGetAnalog(1, 4);
 		Ch3joy2 = (abs(joystickGetAnalog(2, 3)) < 20) ? 0 : joystickGetAnalog(2, 3);
 		Ch4joy2 = (abs(joystickGetAnalog(2, 4)) < 20) ? 0 : joystickGetAnalog(2, 4);
+		leftJoy = joystickGetAnalog(2,3);
+		rightJoy = joystickGetAnalog(2,2);
+
+		leftForward = joystickGetDigital(2, 7, JOY_UP);
+		laftBackward = joystickGetDigital(2, 7, JOY_DOWN);
+		rightForward = joystickGetDigital(2, 8, JOY_UP);
+		rightBackward = joystickGetDigital(2, 8, JOY_DOWN);
 
 		rightDrive = Ch4 - (2*Ch3);
 		leftDrive = Ch4 + (2*Ch3);
@@ -134,25 +151,42 @@ void operatorControl() {
 	 }else if(abs(leftDrive2)>20){
 		motorSet(frontleft,leftDrive2);
 		motorSet(backleft,-leftDrive2);
-	 }else{
+	}else if(leftForward){
+		motorSet(frontleft,127);
+		motorSet(backleft,-127);
+	}else if(laftBackward){
+		motorSet(frontleft,-127);
+		motorSet(backleft,127);
+ 	}else{
 		 motorStop(frontleft);
 		 motorStop(backleft);
 	 }
-	 if(abs(rightDrive)>20){
-		 motorSet(frontright,rightDrive);
-		 motorSet(backright,rightDrive);
-	 }else if(abs(rightDrive2)>20){
- 		motorSet(frontright,rightDrive2);
- 		motorSet(backright,rightDrive2);
- 	}else{
+
+ if(abs(rightDrive)>20){
+	 motorSet(frontright,rightDrive);
+	 motorSet(backright,rightDrive);
+ }else if(abs(rightDrive2)>20){
+	 motorSet(frontright,rightDrive2);
+	 motorSet(backright,rightDrive2);
+ }else if(rightForward){
+	motorSet(frontright,-127);
+	motorSet(backright,-127);
+}else if(rightBackward){
+	motorSet(frontright,127);
+	motorSet(backright,127);
+ }else{
  		motorStop(frontright);
  		motorStop(backright);
  	}
 
+
+	// DIgital Tank Drive
+
+
 	//Reverse from loading post
-	if(joystickGetDigital(1,7,JOY_UP)||joystickGetDigital(2,7,JOY_UP)){
+	if(joystickGetDigital(1,7,JOY_UP)||joystickGetDigital(2,7,JOY_LEFT)){
 		int temp = distance;
-		while(distance<(temp+22)){
+		while(distance<(temp+20)){
 			distance = ultrasonicGet(sonar);
 			motorSet(backright,30);
 	    motorSet(frontright,30);
