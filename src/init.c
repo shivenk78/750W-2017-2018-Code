@@ -21,6 +21,7 @@
  * configure a UART port (usartOpen()) but cannot set up an LCD (lcdInit()).
  */
 void initializeIO() {
+  //standaloneModeEnable( ); 
   lcdInit(uart1);
   lcdSetBacklight(uart1, true);
   lcdPrint(uart1,1,"   << 750W >>   ");

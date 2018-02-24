@@ -60,13 +60,13 @@ void operatorControl() {
 
 
 
-		int leftLift;
+		/*int leftLift;
 		int leftChain;
-		int rightChain;
-		int rightLift;
+		int rightChain;*/
+		int autonSelector;
 
 		int distance;
-		int mogoDist;
+		//int mogoDist;
 		int enc;
 		int dir;
 
@@ -83,7 +83,7 @@ void operatorControl() {
 		bool rightBackward;
 
 		//int LIFT_UPPER_LIMIT = 2040;
-		int LIFT_LOWER_LIMIT = 560;
+		//int LIFT_LOWER_LIMIT = 560;
 		int claw = 1;
 		int frontleft = 2;
 		int frontright = 3;
@@ -92,7 +92,7 @@ void operatorControl() {
 		int mobileliftleft = 6;
 		int mobileliftright = 7;
 		int backright = 8;
-		int backleft = 10;
+		int backleft = 9;
 
 		//1 - LiftRight
 		//2 - ChainbarRight
@@ -101,14 +101,14 @@ void operatorControl() {
 
 		//sonar = ultrasonicInit(7,8);
 		distance = ultrasonicGet(sonar);
-		mogoDist = ultrasonicGet(mogoSonar);
+		//mogoDist = ultrasonicGet(mogoSonar);
 		enc = encoderGet(encoder);
 		dir = gyroGet(gyro);
 
-		leftLift = analogReadCalibrated(LIFT_LEFT);
+		/*leftLift = analogReadCalibrated(LIFT_LEFT);
 		leftChain = analogReadCalibrated(CHAIN_LEFT);
-		rightChain = analogReadCalibrated(CHAIN_RIGHT);
-		rightLift = analogReadCalibrated(LIFT_RIGHT);
+		rightChain = analogReadCalibrated(CHAIN_RIGHT);*/
+		autonSelector = analogReadCalibrated(LIFT_RIGHT);
 
 
 		Ch3 = (abs(joystickGetAnalog(1, 3)) < 20) ? 0 : joystickGetAnalog(1, 3);
@@ -146,16 +146,16 @@ void operatorControl() {
 
 		//Single Stick Drive
 		if(abs(leftDrive)>20){
-		 motorSet(frontleft,leftDrive);
+		 motorSet(frontleft,-leftDrive);
 		 motorSet(backleft,-leftDrive);
 	 }else if(abs(leftDrive2)>20){
-		motorSet(frontleft,leftDrive2);
+		motorSet(frontleft,-leftDrive2);
 		motorSet(backleft,-leftDrive2);
 	}else if(leftForward){
-		motorSet(frontleft,127);
+		motorSet(frontleft,-127);
 		motorSet(backleft,-127);
 	}else if(laftBackward){
-		motorSet(frontleft,-127);
+		motorSet(frontleft,127);
 		motorSet(backleft,127);
  	}else{
 		 motorStop(frontleft);
@@ -186,12 +186,12 @@ void operatorControl() {
 	//Reverse from loading post
 	if(joystickGetDigital(1,7,JOY_UP)||joystickGetDigital(2,7,JOY_LEFT)){
 		int temp = distance;
-		while(distance<(temp+20)){
+		while(distance<(temp+15)){
 			distance = ultrasonicGet(sonar);
 			motorSet(backright,30);
 	    motorSet(frontright,30);
 	    motorSet(backleft,30);
-	    motorSet(frontleft,-30);
+	    motorSet(frontleft,30);
 		}
 		motorStop(backright);
 		motorStop(frontright);
@@ -244,17 +244,22 @@ void operatorControl() {
 		}
 
 		char val = 'w';
-		if(rightLift>2500){
-			val='L';
-		}else if(rightLift<1000){
-			val='R';
+		if (digitalRead(3)==LOW){
+			val = 'P';
 		}else{
-			val='o';
+			if(autonSelector>2500){
+				val='L';
+			}else if(autonSelector<1000){
+				val='R';
+			}else{
+				 val='O';
+			}
 		}
 		//LCD
 		lcdClear(uart1);
-		lcdPrint(uart1,1,"GY %d US %d",dir,distance);
-		lcdPrint(uart1,2,"AS %c EN %d",val,enc);
+		lcdPrint(uart1,1,"Bat: %1.3f V",(double)powerLevelMain()/1000);
+		//lcdPrint(uart1,1,"GY %d US %d",dir,distance);
+		lcdPrint(uart1,2,"AS %c GY %d",val,dir);
 
 		if(lcdReadButtons(uart1)==LCD_BTN_CENTER){
 			backlight = !backlight;

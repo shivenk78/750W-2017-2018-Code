@@ -27,19 +27,26 @@ int chainlift = 4;
 int mobileliftleft = 6;
 int mobileliftright = 7;
 int backright = 8;
-int backleft = 10;
+int backleft = 9;
 
 void mogoDown(){
   motorSet(mobileliftleft,127);
   motorSet(mobileliftright,127);
-  delay(1100); //Lowers Mobile Goal Lift
+  delay(950); //Lowers Mobile Goal Lift
+  motorStop(mobileliftleft);
+  motorStop(mobileliftright);
+}
+void moGoDown(int del){
+  motorSet(mobileliftleft,127);
+  motorSet(mobileliftright,127);
+  delay(del); //Lowers Mobile Goal Lift
   motorStop(mobileliftleft);
   motorStop(mobileliftright);
 }
 void mogoUp(){
   motorSet(mobileliftleft,-127);
   motorSet(mobileliftright,-127);
-  delay(700); //Raises Mobile Goal
+  delay(800); //Raises Mobile Goal
   motorStop(mobileliftleft);
   motorStop(mobileliftright);
 }
@@ -47,7 +54,7 @@ void forward(int del){
   motorSet(backright,-127);
   motorSet(backleft,-127);
   motorSet(frontright,-127);
-  motorSet(frontleft,127);
+  motorSet(frontleft,-127);
   delay(del);
   motorStop(backright);
   motorStop(backleft);
@@ -62,7 +69,7 @@ void enForward(int dist){
     motorSet(backright,-127);
     motorSet(backleft,-127);
     motorSet(frontright,-127);
-    motorSet(frontleft,127);
+    motorSet(frontleft,-127);
   }
   motorStop(backright);
   motorStop(backleft);
@@ -73,7 +80,18 @@ void reverse(int del){
   motorSet(backright,127);
   motorSet(backleft,127);
   motorSet(frontright,127);
-  motorSet(frontleft,-127);
+  motorSet(frontleft,127);
+  delay(del);
+  motorStop(backright);
+  motorStop(backleft);
+  motorStop(frontright);
+  motorStop(frontleft);
+}
+void slowReverse(int del){
+  motorSet(backright,30);
+  motorSet(backleft,30);
+  motorSet(frontright,30);
+  motorSet(frontleft,30);
   delay(del);
   motorStop(backright);
   motorStop(backleft);
@@ -86,7 +104,7 @@ void preload(){
   delay(1000);
   motorSet(chainlift,-80);
   motorSet(claw,127);
-  delay(850);
+  delay(1200);
   motorStop(chainlift);
   delay(500);
   motorSet(claw,-127);
@@ -103,7 +121,7 @@ void turnLeft(int angle){
       motorSet(backright,-127);
       motorSet(backleft,127);
       motorSet(frontright,-127);
-      motorSet(frontleft,-127);
+      motorSet(frontleft,127);
     }
     motorStop(backright);
     motorStop(backleft);
@@ -119,7 +137,7 @@ void turnRight(int angle){
       motorSet(backright,127);
       motorSet(backleft,-127);
       motorSet(frontright,127);
-      motorSet(frontleft,127);
+      motorSet(frontleft,-127);
     }
     motorStop(backright);
     motorStop(backleft);
@@ -141,21 +159,58 @@ void autonomous() {
   lcdSetText(uart1,2,"<<750 WOLVES>>");
 
   gyroReset(gyro);
-  if(selector>2500){ //LEFT AUTON ////////////////////////////////
-    liftUp(500);
 
+  if(digitalRead(3)==LOW){
+    //first
     mogoDown();
-    forward(1750);
-     //Goes forward until mobile goal is reached
+    forward(1200);
     mogoUp();
     preload();
+    reverse(1250);
+    turnRight(154);
+    forward(500);
+    moGoDown(800);
+    //second
+    reverse(600);
+    turnLeft(140);
+    //slowReverse(1300);
+    forward(2200);
+    mogoUp();
+    forward(800);
+    moGoDown(700);
+    //third
+    reverse(460);
+    moGoDown(200);
+    turnLeft(57);
+    enForward(620);
+    turnLeft(62);
+    forward(1400);
+    mogoUp();
     reverse(1400);
-
+    turnRight(153);
+    forward(600);
+    moGoDown(700);
+    //fourth
+    reverse(800);
+    moGoDown(200);
+    turnLeft(155);
+    forward(2300);
+    mogoUp();
+    forward(1000);
+    mogoDown();
+    moGoDown(300);
+    //fifth
+    reverse(350);
+    turnRight(65);
+    forward(400);
+    turnRight(20);
+    forward(1750);
+    mogoUp();
+    reverse(1400);
     turnLeft(170);
-
-    motorSet(backright,-50);
-    motorSet(backleft,-127);
-    motorSet(frontright,-50);
+    motorSet(backright,50);
+    motorSet(backleft,127);
+    motorSet(frontright,50);
     motorSet(frontleft,127);
     delay(2000);
     motorStop(backright);
@@ -164,97 +219,68 @@ void autonomous() {
     motorStop(frontleft);
     mogoDown();
     reverse(1500);
-  }
-
-  else if(selector<1000){ //RIGHT AUTON ////////////////////////////////
-    liftUp(500);
-
-    mogoDown();
-    forward(1650);
-     //Goes forward until mobile goal is reached
-    mogoUp();
-    preload();
-    reverse(1100);
-
-    turnRight(170);
-    motorSet(backright,-120);
-    motorSet(backleft,-50);
-    motorSet(frontright,-120);
-    motorSet(frontleft,50);
-    delay(1500);
-    motorStop(backright);
-    motorStop(backleft);
-    motorStop(frontright);
-    motorStop(frontleft);
-    mogoDown();
-    reverse(1500);
-  }
-  /*else{  //Off Auton ////////////////////////////////////////////////////
-    liftUp(500);
-    mogoDown();
-    forward(1750);
-     //Goes forward until mobile goal is reached
-    mogoUp();
-    preload();
-    mogoDown();
+    //park
     reverse(1000);
-  }*/
-  else{
-    //first
-    liftUp(500);
-    mogoDown();
-    forward(1200);
-    mogoUp();
-    reverse(1400);
-    turnRight(154);
-    forward(600);
-    mogoDown();
-
-    //second
-    reverse(600);
-    turnLeft(152);
-    forward(2300);
-    mogoUp();
-    forward(700);
-    mogoDown();
-
-    //third
-    reverse(450);
     turnLeft(50);
-    //forward(450);
-    enForward(400);
-    turnLeft(68);
-    forward(1300);
-    mogoUp();
-    reverse(1400);
-    turnRight(153);
-    forward(600);
-    mogoDown();
-
-    //fourth
-    reverse(800);
-    turnLeft(155);
-    forward(2300);
-    mogoUp();
-    forward(1000);
-    mogoDown();
-
-    //fifth
-    reverse(300);
-    turnRight(50);
-    forward(200);
-    turnRight(30);
-    forward(2000);
-    mogoUp();
-    reverse(1400);
-    turnLeft(140);
-    forward(1000);
-    turnRight(50);
-    forward(300);
-    mogoDown();
-    reverse(400);
-
-
+    reverse(700);
   }
+  else{
+    if(selector>2500){ //LEFT AUTON ////////////////////////////////
+      liftUp(500);
+      mogoDown();
+      forward(1750);
+       //Goes forward until mobile goal is reached
+      mogoUp();
+      preload();
+      reverse(1400);
+      turnLeft(170);
+      motorSet(backright,50);
+      motorSet(backleft,127);
+      motorSet(frontright,50);
+      motorSet(frontleft,127);
+      delay(2000);
+      motorStop(backright);
+      motorStop(backleft);
+      motorStop(frontright);
+      motorStop(frontleft);
+      mogoDown();
+      reverse(1500);
+    }
 
+    else if(selector<1000){ //RIGHT AUTON ////////////////////////////////
+      liftUp(500);
+      mogoDown();
+      forward(1650);
+       //Goes forward until mobile goal is reached
+      mogoUp();
+      preload();
+      reverse(1100);
+      turnRight(170);
+      motorSet(backright,120);
+      motorSet(backleft,50);
+      motorSet(frontright,120);
+      motorSet(frontleft,50);
+      delay(1500);
+      motorStop(backright);
+      motorStop(backleft);
+      motorStop(frontright);
+      motorStop(frontleft);
+      mogoDown();
+      reverse(1500);
+    }
+    else{
+      //Off Auton ////////////////////////////////////////////////////
+        liftUp(500);
+        mogoDown();
+        forward(1750);
+         //Goes forward until mobile goal is reached
+        mogoUp();
+        preload();
+        reverse(1400);
+        forward(300);
+        turnRight(170);
+        mogoDown();
+        reverse(1000);
+    }
+  }
 }
