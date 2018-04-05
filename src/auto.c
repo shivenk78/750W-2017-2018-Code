@@ -1,25 +1,12 @@
 #include "main.h"
-//Port Definitions
-//8-frontleft
-//3-backleft
-//9-frontright
-//5 backright
-//6,7 mobile goal lift
-//2-main lift
-//4 chain bar lift
-//1 claw
 
-//1 - LiftRight
-//2 - ChainbarRight
-//3 - ChainbarLeft
-//4 - LiftLeft
 int distance;
 int enc;
 int dir;
 int selector;
 bool side; //TRUE = left FALSE = right
 
-int claw = 1;
+int claw = 10;
 int frontleft = 2;
 int frontright = 3;
 int mainlift = 5;
@@ -108,7 +95,21 @@ void preload(){
   motorStop(chainlift);
   delay(500);
   motorSet(claw,-127);
-  delay(500);
+  delay(1500);
+  motorStop(chainlift);
+  motorStop(claw);
+}
+
+void  coneLoad(){
+  motorSet(chainlift,80);
+  motorSet(claw,127);
+  delay(1400);
+  motorSet(chainlift,-80);
+  delay(1200);
+  motorStop(chainlift);
+  delay(600);
+  motorSet(claw,-127);
+  delay(1700);
   motorStop(chainlift);
   motorStop(claw);
 }
@@ -122,6 +123,22 @@ void turnLeft(int angle){
       motorSet(backleft,127);
       motorSet(frontright,-127);
       motorSet(frontleft,127);
+    }
+    motorStop(backright);
+    motorStop(backleft);
+    motorStop(frontright);
+    motorStop(frontleft);
+}
+void slowturnLeft(int angle){
+  gyroReset(gyro);
+    dir = gyroGet(gyro);
+    dir+=4;
+    while(abs(dir)<angle){
+      dir = gyroGet(gyro);
+      motorSet(backright,-35);
+      motorSet(backleft,35);
+      motorSet(frontright,-35);
+      motorSet(frontleft,35);
     }
     motorStop(backright);
     motorStop(backleft);
@@ -172,26 +189,26 @@ void autonomous() {
     moGoDown(800);
     //second
     reverse(600);
-    turnLeft(140);
+    slowturnLeft(175);
     //slowReverse(1300);
     forward(2200);
     mogoUp();
     forward(800);
     moGoDown(700);
     //third
-    reverse(460);
+    reverse(380);
     moGoDown(200);
     turnLeft(57);
-    enForward(620);
+    enForward(600);
     turnLeft(62);
-    forward(1400);
+    forward(1350);
     mogoUp();
     reverse(1400);
-    turnRight(153);
+    turnRight(155);
     forward(600);
     moGoDown(700);
     //fourth
-    reverse(800);
+    reverse(600);
     moGoDown(200);
     turnLeft(155);
     forward(2300);
@@ -226,61 +243,50 @@ void autonomous() {
   }
   else{
     if(selector>2500){ //LEFT AUTON ////////////////////////////////
-      liftUp(500);
+      liftUp(100);
       mogoDown();
-      forward(1750);
+      forward(1500);
        //Goes forward until mobile goal is reached
       mogoUp();
       preload();
-      reverse(1400);
+      //coneLoad();
+      reverse(1000);
       turnLeft(170);
-      motorSet(backright,50);
-      motorSet(backleft,127);
-      motorSet(frontright,50);
-      motorSet(frontleft,127);
-      delay(2000);
-      motorStop(backright);
-      motorStop(backleft);
-      motorStop(frontright);
-      motorStop(frontleft);
+      forward(1000);
+      turnRight(23);
+      forward(300);
       mogoDown();
-      reverse(1500);
+      reverse(700);
     }
 
     else if(selector<1000){ //RIGHT AUTON ////////////////////////////////
       liftUp(500);
       mogoDown();
-      forward(1650);
-       //Goes forward until mobile goal is reached
+      forward(1600);
+       //Goes forward until mobile goal is reached 
       mogoUp();
       preload();
-      reverse(1100);
-      turnRight(170);
-      motorSet(backright,120);
-      motorSet(backleft,50);
-      motorSet(frontright,120);
-      motorSet(frontleft,50);
-      delay(1500);
-      motorStop(backright);
-      motorStop(backleft);
-      motorStop(frontright);
-      motorStop(frontleft);
+      //coneLoad();
+      reverse(750);
+      turnRight(180);
+      forward(1400);
+      turnLeft(18);
+      forward(300);
       mogoDown();
-      reverse(1500);
+      reverse(700);
     }
     else{
       //Off Auton ////////////////////////////////////////////////////
         liftUp(500);
         mogoDown();
-        forward(1750);
+        forward(1450);
          //Goes forward until mobile goal is reached
         mogoUp();
         preload();
-        reverse(1400);
-        forward(300);
-        turnRight(170);
-        mogoDown();
-        reverse(1000);
+        //forward(100);
+        coneLoad();
+        forward(100);
+        coneLoad();
     }
   }
 }
