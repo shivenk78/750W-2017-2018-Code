@@ -17,8 +17,8 @@
  * VEX Cortex is starting up. As the scheduler is still paused, most API functions will fail.
  *
  * The purpose of this function is solely to set the default pin modes (pinMode()) and port
- * states (digitalWrite()) of limit switches, push buttons, and solenoids. It can also safely
- * configure a UART port (usartOpen()) but cannot set up an LCD (lcdInit()).
+ * states (digitalWrite()) of limit switches, push buttons, and solenoids. It can also safelyasdf
+ * configure a UART port (usartOpen()) but cannot set up an LCD (lcdInit()).asdfasdf
  */
 void initializeIO() {
   //standaloneModeEnable( ); 
